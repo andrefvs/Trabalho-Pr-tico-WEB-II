@@ -95,7 +95,7 @@ function contarMovimentos(numero) {
     let movimentoAux = movimentos.getAttribute("movimentos");
     movimentoAux++;
     movimentos.setAttribute("movimentos", movimentoAux);
-    movimentos.textContent = "Movimentos: " + movimentoAux + ".";
+    movimentos.textContent = "Movimentos: " + movimentoAux;
 }
 
 function atualizarTemporizador() {
@@ -116,7 +116,7 @@ function atualizarTemporizador() {
 
     let segundosFormatados = segundos < 10 ? `0${segundos}` : segundos;
     let minutosFormatados = minutos < 10 ? `0${minutos}` : minutos;
-    temporizadorElemento.textContent = `${minutosFormatados}:${segundosFormatados}`;
+    temporizadorElemento.textContent = "Tempo: " + `${minutosFormatados}:${segundosFormatados}`;
 }
 
 // Inicia o temporizador
