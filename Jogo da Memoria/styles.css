@@ -57,15 +57,13 @@ header {
     color: white;
     padding: 10px;
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 30px;
     font-family: Arial, sans-serif;
 }
 
 #movimentos {
-    top: 80px;
+    top: 85px;
 }
-
-
 
 @media (max-width: 1200px) {
     .grid-container {
