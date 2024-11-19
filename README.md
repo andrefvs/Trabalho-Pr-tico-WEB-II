@@ -1,2 +1,6 @@
 # Trabalho-Prático-WEB-II
-* Três pequenos projetos de jogos, utilizando HTML, CSS e JavaScript.
+Esse repositório possui três pequenos projetos de jogos que foram feitos utilizando HTML, CSS e JavaScript.
+Os jogos presentes são:
+- Jogo da memória;
+- Quiz;
+- Flappy Mario.
