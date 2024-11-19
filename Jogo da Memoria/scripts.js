@@ -9,17 +9,24 @@ const imagens = [
 ];
 
 const temporizadorElemento = document.getElementById("temporizador");
-const limiteDeTempo = 0; // Caso eu for inverter.
 const movimentos = document.getElementById("movimentos");
 
 let gameOver = 0;
 let segundos = 0;
 let minutos = 1;
-let finalizado = 0;
-let cartasViradas = 0;
+let cartasViradas = [];
+let movimentosContagem = 0;
 
 // Duplicar as imagens para criar pares (12 cartas no total, portanto 6 pares)
 let imagensDuplicadas = [...imagens, ...imagens];
+embaralharArray(imagensDuplicadas);
+
+// Embaralhar e distribuir as imagens
+const cartas = document.querySelectorAll(".grid-item");
+cartas.forEach((carta, index) => {
+    carta.setAttribute("data-imagem", imagensDuplicadas[index]);
+    carta.setAttribute("par-encontrado", "0");
+});
 
 // Função para embaralhar o array usando o algoritmo de Fisher-Yates
 function embaralharArray(array) {
@@ -29,84 +36,57 @@ function embaralharArray(array) {
     }
 }
 
-// Embaralhar as imagens duplicadas
-embaralharArray(imagensDuplicadas);
-
-// Distribuir as imagens nas cartas
-const cartas = document.querySelectorAll(".grid-item");
-cartas.forEach((carta, index) => {
-    // Atribui uma imagem aleatória do array embaralhado a cada carta
-    carta.setAttribute("data-imagem", imagensDuplicadas[index]);
-    carta.setAttribute("par-encontrado", "0");
-    movimentos.setAttribute("movimentos", 0);
-});
-
-// Função para virar a carta e exibir a imagem de trás
+// Função para virar a carta
 function virarCarta(carta) {
-    if (gameOver == 1 || cartasViradas >= 2) {
+    if (gameOver === 1 || cartasViradas.length >= 2 || carta.getAttribute("data-virada") === "1") {
         return;
     }
-    contarMovimentos(carta.getAttribute("par-encontrado"));
-    let estadoVirada = carta.getAttribute("data-virada");
     
-    if (estadoVirada === "0") {
-        carta.setAttribute("data-virada", "1");
-        const imagemVerso = carta.getAttribute("data-imagem");
-        carta.style.backgroundImage = `url(${imagemVerso})`;
-        cartasViradas++;
-        let cartaViradaAnterior = null;
-
-        cartas.forEach((cartaVirada) => {
-            if (cartaVirada.getAttribute("par-encontrado") === "0") {
-                if (cartaVirada !== carta && cartaVirada.getAttribute("data-virada") === "1") {
-                    cartaViradaAnterior = cartaVirada;
-                }
-            }
-        });
-
-        if (cartaViradaAnterior) {
-            if (cartaViradaAnterior.getAttribute("data-imagem") === imagemVerso) {
-                cartaViradaAnterior.setAttribute("par-encontrado", "1");
-                carta.setAttribute("par-encontrado", "1");
-                cartasViradas = 0;
-            } else {
-                setTimeout(() => {
-                    carta.setAttribute("data-virada", "0");
-                    carta.style.backgroundImage = "url('images/caveira.png')";
-                    cartaViradaAnterior.setAttribute("data-virada", "0");
-                    cartaViradaAnterior.style.backgroundImage = "url('images/caveira.png')";
-                    cartasViradas = 0;
-                }, 1000);
-            }
-        }
-    } else {
-        if (carta.getAttribute("par-encontrado") === "0") {
-            carta.setAttribute("data-virada", "0");
-            carta.style.backgroundImage = "url('images/caveira.png')";
-        }
+    carta.setAttribute("data-virada", "1");
+    carta.style.backgroundImage = `url(${carta.getAttribute("data-imagem")})`;
+    cartasViradas.push(carta);
+    contarMovimentos();
+    
+    if (cartasViradas.length === 2) {
+        verificarPar();
     }
 }
 
-
-function contarMovimentos(numero) {
-    console.log(numero);
-    if(numero == 1)
-        return;
-    let movimentoAux = movimentos.getAttribute("movimentos");
-    movimentoAux++;
-    movimentos.setAttribute("movimentos", movimentoAux);
-    movimentos.textContent = "Movimentos: " + movimentoAux;
+// Função para verificar se há um par
+function verificarPar() {
+    const [primeiraCarta, segundaCarta] = cartasViradas;
+    
+    if (primeiraCarta.getAttribute("data-imagem") === segundaCarta.getAttribute("data-imagem")) {
+        primeiraCarta.setAttribute("par-encontrado", "1");
+        segundaCarta.setAttribute("par-encontrado", "1");
+        cartasViradas = [];
+        testaVitoria();
+    } else {
+        setTimeout(() => {
+            primeiraCarta.setAttribute("data-virada", "0");
+            primeiraCarta.style.backgroundImage = "url('images/caveira.png')";
+            segundaCarta.setAttribute("data-virada", "0");
+            segundaCarta.style.backgroundImage = "url('images/caveira.png')";
+            cartasViradas = [];
+        }, 1000);
+    }
 }
 
+// Função para contar movimentos
+function contarMovimentos() {
+    movimentosContagem++;
+    movimentos.textContent = "Movimentos: " + movimentosContagem;
+}
+
+// Função para atualizar o temporizador
 function atualizarTemporizador() {
     if (minutos === 0 && segundos === 0) {
         temporizadorElemento.textContent = "Tempo Esgotado!";
-        clearInterval(intervalo); // Para o temporizador
+        clearInterval(intervalo);
         gameOver = 1;
         return;
     }
 
-    // Decrementa o tempo
     if (segundos === 0) {
         minutos--;
         segundos = 59;
@@ -114,22 +94,14 @@ function atualizarTemporizador() {
         segundos--;
     }
 
-    let segundosFormatados = segundos < 10 ? `0${segundos}` : segundos;
-    let minutosFormatados = minutos < 10 ? `0${minutos}` : minutos;
-    temporizadorElemento.textContent = "Tempo: " + `${minutosFormatados}:${segundosFormatados}`;
+    temporizadorElemento.textContent = `Tempo: ${minutos < 10 ? "0" : ""}${minutos}:${segundos < 10 ? "0" : ""}${segundos}`;
 }
 
-function testaVitoria(){
-    const cartas = document.querySelectorAll(".grid-item");
-    cartas.forEach((cartaVirada) => {
-        if(cartaVirada.getAttribute("par-encontrado") === "1"){
-            finalizado = 1;
-        }else{
-            finalizado = 0;
-            return;
-        }
-    });
-    if(finalizado == 1){
+// Função para testar vitória
+function testaVitoria() {
+    const todasEncontradas = Array.from(cartas).every(carta => carta.getAttribute("par-encontrado") === "1");
+    if (todasEncontradas) {
+        temporizadorElemento.textContent = "Você venceu!";
         clearInterval(intervalo);
         gameOver = 1;
     }
@@ -137,4 +109,3 @@ function testaVitoria(){
 
 // Inicia o temporizador
 const intervalo = setInterval(atualizarTemporizador, 1000);
-const vitoria = setInterval(testaVitoria, onclick);
