@@ -16,6 +16,7 @@ let gameOver = 0;
 let segundos = 0;
 let minutos = 1;
 let finalizado = 0;
+let cartasViradas = 0;
 
 // Duplicar as imagens para criar pares (12 cartas no total, portanto 6 pares)
 let imagensDuplicadas = [...imagens, ...imagens];
@@ -42,23 +43,21 @@ cartas.forEach((carta, index) => {
 
 // Função para virar a carta e exibir a imagem de trás
 function virarCarta(carta) {
-    console.log(gameOver);
-    if(gameOver == 1){
+    if (gameOver == 1 || cartasViradas >= 2) {
         return;
     }
     contarMovimentos(carta.getAttribute("par-encontrado"));
     let estadoVirada = carta.getAttribute("data-virada");
+    
     if (estadoVirada === "0") {
-        // Se não está virada, vira a carta e mostra a imagem de trás
         carta.setAttribute("data-virada", "1");
         const imagemVerso = carta.getAttribute("data-imagem");
-        carta.querySelector("img").src = imagemVerso;
-        
-        // Verifica se há outra carta virada e se são iguais
+        carta.style.backgroundImage = `url(${imagemVerso})`;
+        cartasViradas++;
         let cartaViradaAnterior = null;
 
         cartas.forEach((cartaVirada) => {
-            if(cartaVirada.getAttribute("par-encontrado") === "0"){
+            if (cartaVirada.getAttribute("par-encontrado") === "0") {
                 if (cartaVirada !== carta && cartaVirada.getAttribute("data-virada") === "1") {
                     cartaViradaAnterior = cartaVirada;
                 }
@@ -66,27 +65,28 @@ function virarCarta(carta) {
         });
 
         if (cartaViradaAnterior) {
-            // Verifica se as cartas são iguais
             if (cartaViradaAnterior.getAttribute("data-imagem") === imagemVerso) {
                 cartaViradaAnterior.setAttribute("par-encontrado", "1");
                 carta.setAttribute("par-encontrado", "1");
+                cartasViradas = 0;
             } else {
-                // Se as cartas não combinam, espera alguns segundos antes de virar de volta
                 setTimeout(() => {
                     carta.setAttribute("data-virada", "0");
-                    carta.querySelector("img").src = "images/caveira.png";
+                    carta.style.backgroundImage = "url('images/caveira.png')";
                     cartaViradaAnterior.setAttribute("data-virada", "0");
-                    cartaViradaAnterior.querySelector("img").src = "images/caveira.png";
-                }, 1000); // 1000ms = 1 segundo de atraso
+                    cartaViradaAnterior.style.backgroundImage = "url('images/caveira.png')";
+                    cartasViradas = 0;
+                }, 1000);
             }
         }
-    }else{ // Deletar caso não acharmos daora poder voltar 
-        if(carta.getAttribute("par-encontrado") === "0"){
+    } else {
+        if (carta.getAttribute("par-encontrado") === "0") {
             carta.setAttribute("data-virada", "0");
-            carta.querySelector("img").src = "images/caveira.png";
+            carta.style.backgroundImage = "url('images/caveira.png')";
         }
     }
 }
+
 
 function contarMovimentos(numero) {
     console.log(numero);
@@ -119,5 +119,22 @@ function atualizarTemporizador() {
     temporizadorElemento.textContent = "Tempo: " + `${minutosFormatados}:${segundosFormatados}`;
 }
 
+function testaVitoria(){
+    const cartas = document.querySelectorAll(".grid-item");
+    cartas.forEach((cartaVirada) => {
+        if(cartaVirada.getAttribute("par-encontrado") === "1"){
+            finalizado = 1;
+        }else{
+            finalizado = 0;
+            return;
+        }
+    });
+    if(finalizado == 1){
+        clearInterval(intervalo);
+        gameOver = 1;
+    }
+}
+
 // Inicia o temporizador
 const intervalo = setInterval(atualizarTemporizador, 1000);
+const vitoria = setInterval(testaVitoria, onclick);
