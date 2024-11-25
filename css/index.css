@@ -1,0 +1,90 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Mono', monospace;
+    color: #fff;
+}
+body{
+    width: 100vw;
+    overflow: hidden;
+}
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(#0084d1, #c9ecff);
+    overflow: hidden;
+}
+h1, p, a, h2{
+    width: 100%;
+    text-align: center;
+}
+h1{
+    font-size: 80px;
+}
+.start-container img, a{
+    height: 70px;
+    width: 220px;
+}
+.title-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5%;
+}
+.start-container:hover img, a{
+    height: 80px;
+    width: 240px;
+}
+
+.pipe{
+    position: absolute;
+    bottom: 0;
+    width: 80px;
+    height: 80px;
+    animation: pipeAnimation 3s infinite linear;
+
+}
+.clouds{
+    position: absolute;
+    width: 750px;
+    height: 300px;
+    margin-top: 10px;
+    animation: cloudsAnimation 4s infinite linear;
+    z-index: 0;
+}
+@keyframes pipeAnimation{
+    from{
+        right: -80px;
+    }
+    to{
+        right: 100%;
+    }
+}
+@keyframes cloudsAnimation{
+    from{
+        right: -600px;
+    }
+    to{
+        right: 100%;
+    }
+}
+@media screen and (max-width: 1000px){
+    .pipe{
+        display: none;
+    }
+    .clouds{
+        display: none;
+    }
+}
+@media screen and (max-width: 500px){
+    h1{
+        font-size: 60px;
+    }
+    main{
+        padding: 2%;
+    }
+}
