@@ -15,12 +15,15 @@
 <body class="tela-body">
     <header>
         <div class="instrucoes">
-           <p>Pressione <i>Space</i> para pular e <i>Enter</i> para reiniciar o jogo.</p>
+           <p>Aperte <i>Space</i> para pular e <i>Enter</i> para recomeçar o jogo.</p>
         </div>
     </header>
     <main class="game-board">
         <div class="game-status">
+            <p>Pontuação: <span id="score">0</span></p>
+            <p>Maior Pontuação: <span id="high-score">0</span></p>
         </div>
+        <button id="audio-toggle" class="audio-button">🔊 Som: Ativado</button>
         <img src="images/clouds.png" alt="imagem nuvens" class="clouds">
         <img src="images/mario.gif" alt="gif mario correndo" class="mario">
         <img src="images/pipe.png" alt="imagem tubo verde" class="pipe">

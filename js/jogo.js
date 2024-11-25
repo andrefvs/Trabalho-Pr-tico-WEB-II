@@ -7,6 +7,29 @@ const mainMusic = new Audio('audios/main-theme.mp3');
 var counterVal = 0;
 var body = document.querySelector(".tela-body");
 
+let score = 0;
+let highScore = localStorage.getItem("highScore") || 0;
+let survivalInterval;
+
+let pipePassed = false;
+
+let audioEnabled = true;
+
+const audioToggleBtn = document.getElementById("audio-toggle");
+
+document.getElementById("high-score").innerText = highScore;
+
+function updateScore() {
+    score++;
+    document.getElementById("score").innerText = score;
+
+    if (score > highScore) {
+        highScore = score;
+        document.getElementById("high-score").innerText = highScore;
+        localStorage.setItem("highScore", highScore);
+    }
+}
+
 mainMusic.loop = true;
 
 document.addEventListener('keydown', startMainMusic, { once: true });
@@ -18,15 +41,36 @@ function startMainMusic() {
 
 
 function jump(){
-
-    jumpSound.currentTime = 0;
-    jumpSound.play().catch((error) => console.error('Erro ao reproduzir o som:', error));
-
+    playSound(jumpSound);
+    
     mario.classList.add("jump")
 
     setTimeout(() => {
         mario.classList.remove("jump")
     } , 500);
+}
+
+function toggleAudio() {
+    audioEnabled = !audioEnabled;
+
+    if (audioEnabled) {
+        mainMusic.play().catch((error) => console.error('Erro ao reproduzir música principal:', error));
+        audioToggleBtn.textContent = "🔊 Som: Ativado";
+    } else {
+        mainMusic.pause();
+        jumpSound.pause();
+        gameOverSound.pause();
+        audioToggleBtn.textContent = "🔇 Som: Desativado";
+    }
+}
+
+audioToggleBtn.addEventListener("click", toggleAudio);
+
+function playSound(audio) {
+    if (audioEnabled) {
+        audio.currentTime = 0;
+        audio.play().catch((error) => console.error('Erro ao reproduzir o som:', error));
+    }
 }
 
 const loop = setInterval(() => {
@@ -52,13 +96,18 @@ const loop = setInterval(() => {
             clearInterval(loop)
             
             gameOver();
-        } else if (pipePosition <= 40 && pipePosition >= 37 && marioPosition == 140 && marioPosition <= 150){    
-            updateDisplay(++counterVal);
         } 
+        if (pipePosition < 0 && !pipePassed) {
+            pipePassed = true; 
+            updateScore(); 
+        }
+    
+        if (pipePosition > 0) {
+            pipePassed = false;
+        }
     } else if(document.body.offsetWidth >= 420){
         if (pipePosition <= 85 && pipePosition > 0 && marioPosition < 50){
-            gameOverSound.currentTime = 0;
-            gameOverSound.play().catch((error) => console.error('Erro ao reproduzir o som:', error));
+            playSound(gameOverSound);
             mainMusic.pause();
             pipe.style.animation = 'none';
             pipe.style.left = `${pipePosition}px`;
@@ -72,13 +121,18 @@ const loop = setInterval(() => {
             clearInterval(loop)
             
             gameOver();
-        } else if (pipePosition <= 40 && pipePosition >= 37 && marioPosition == 140 && marioPosition <= 150){    
-            updateDisplay(++counterVal);
-        }  
+        } 
+        if (pipePosition < 0 && !pipePassed) {
+            pipePassed = true; 
+            updateScore(); 
+        }
+    
+        if (pipePosition > 0) {
+            pipePassed = false;
+        }
     }else{
         if (pipePosition <= 80 && pipePosition > 0 && marioPosition < 50){
-            gameOverSound.currentTime = 0;
-            gameOverSound.play().catch((error) => console.error('Erro ao reproduzir o som:', error));
+            playSound(gameOverSound);
             mainMusic.pause();
             pipe.style.animation = 'none';
             pipe.style.left = `${pipePosition}px`;
@@ -93,9 +147,16 @@ const loop = setInterval(() => {
             
             gameOver();
 
-        } else if (pipePosition <= 40 && pipePosition >= 37 && marioPosition == 140 && marioPosition <= 150){    
-            updateDisplay(++counterVal);
-        } 
+        }
+        if (pipePosition < 0 && !pipePassed) {
+            pipePassed = true;
+            updateScore();
+        }
+    
+        
+        if (pipePosition > 0) {
+            pipePassed = false;
+        }
     }
     
 }, 10);
@@ -110,14 +171,14 @@ function start() {
     location.reload();
 }
 
-function updateDisplay(val) {
-    document.getElementById("counter-label").innerHTML = val;
-}
-
 body.addEventListener('touchstart', jump);
 
 document.addEventListener('keydown', function(event) {
     if (event.key === " ") {
+        if (document.activeElement === audioToggleBtn) {
+            event.preventDefault();
+            return;
+        }
         jump();
       }
 });
