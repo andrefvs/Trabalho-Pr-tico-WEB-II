@@ -80,8 +80,7 @@ const loop = setInterval(() => {
     const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
     if(document.body.offsetWidth >= 760){
         if (pipePosition <= 100 && pipePosition > 0 && marioPosition < 80){
-            gameOverSound.currentTime = 0;
-            gameOverSound.play().catch((error) => console.error('Erro ao reproduzir o som:', error));
+            playSound(gameOverSound);
             mainMusic.pause();
             pipe.style.animation = 'none';
             pipe.style.left = `${pipePosition}px`;
