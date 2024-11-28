@@ -1,6 +1,3 @@
-# Trabalho-Prático-WEB-II
-Esse repositório possui três pequenos projetos de jogos que foram feitos utilizando HTML, CSS e JavaScript.
-Os jogos presentes são:
-- Jogo da memória;
-- Quiz;
-- Flappy Mario.
+# Quiz sobre o magrelo!
+Teste seu nível de amizade no quiz do magrelo!
+Este quiz possui perguntas que apenas os amigos do magrelo saberão as respostas
