@@ -8,6 +8,15 @@
     margin: auto;
 }
 
+.resetar {
+    border: solid;
+    border-radius: 10px;
+    background-color: orange;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+}
+
 .grid-item {
     width: 220px;
     height: 200px;
@@ -39,7 +48,7 @@
 }
 
 body {
-    background-image: url(images/Wallpaper.jpg);
+    background-image: url(images/fundo.jpg);
     background-size: cover;
     background-position: center; 
     margin: 0;
