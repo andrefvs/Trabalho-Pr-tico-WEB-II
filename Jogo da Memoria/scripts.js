@@ -3,9 +3,9 @@ const imagens = [
     "images/Luffy.jpg",
     "images/Zoro.jpg",
     "images/Sanji.jpg",
-    "images/Nami.jpg",
+    "images/Nami.png",
     "images/Robin.jpg",
-    "images/Usopp.jpg"
+    "images/Chopper.png"
 ];
 
 const temporizadorElemento = document.getElementById("temporizador");
@@ -101,7 +101,12 @@ function atualizarTemporizador() {
 function testaVitoria() {
     const todasEncontradas = Array.from(cartas).every(carta => carta.getAttribute("par-encontrado") === "1");
     if (todasEncontradas) {
-        temporizadorElemento.textContent = "Você venceu!";
+        Swal.fire({
+            title: "Você venceu!",
+            text: "Movimentos: " + movimentosContagem,
+            html: "<button class=\"resetar\" onClick=\"location.reload()\">Jogar novamente</button>",
+            icon: "success"
+          });
         clearInterval(intervalo);
         gameOver = 1;
     }
