@@ -53,10 +53,11 @@ function answerQuestion(selectedElement) {
   const isCorrect = selectedElement.innerText === questions[currentQuestion].correct;
   
   if (isCorrect) {
-    score++;
     selectedElement.classList.add("correct");
+    score++;
   } else {
     selectedElement.classList.add("incorrect");
+    visualFeedback();
   }
   
   document.getElementById("score").innerText = `Pontuação: ${score}`;
@@ -69,6 +70,13 @@ function answerQuestion(selectedElement) {
       gameOver();
     }
   }, 1000);
+}
+
+function visualFeedback() {
+  const answers = document.querySelectorAll(".answer");
+  for(i = 0; i < answers.length;i++)
+    if(answers[i].innerText == questions[currentQuestion].correct)
+      answers[i].classList.add("correct")
 }
 
 function gameOver() {
