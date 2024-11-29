@@ -7,52 +7,70 @@
   <style>
 
     body {
-        font-family:Georgia, 'Times New Roman', Times, serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #27aecc;
-        color: #2d1f7c
+      font-family:Georgia, 'Times New Roman', Times, serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #25545f;
+      color: #2d1f7c
     }
     
     #game-container {
-        background-color: #f7f7bf;
-        padding: 20px;
-        width: 300px;
-        text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        color: #2d1f7c
+      background-color: #f7f7bf;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      color: #2d1f7c
+    }
+
+    #magrelo {
+      position: absolute;
+      left: 200px;
+      width: 375px; 
+      border-radius: 12px;
     }
     
     #question {
-        font-size: 1.2em;
-        margin-bottom: 15px;
-        color: #2d1f7c
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      color: #2d1f7c
     }
     
     .answer {
-        padding: 10px;
-        margin: 5px 0;
-        background-color: #eed85e;
-        border-radius: 4px;
-        cursor: pointer;
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #eed85e;
+      border-radius: 4px;
+      cursor: pointer;
     }
     
     .answer:hover {
-        background-color: #ff6262;
-        color: white;
+      background-color: #ff6262;
+      color: white;
+    }
+    
+    .correct {
+      background-color: #4CAF50; 
+      color: white;
+    }
+    
+    .incorrect {
+      background-color: #F44336; 
+      color: white;
     }
     
     #score {
-        font-size: 1.1em;
-        margin-top: 15px;
+      font-size: 1.1em;
+      margin-top: 15px;
     }
   </style>
 
 </head>
 <body>
+  <img id="magrelo" src="new profile.jpg" alt="imagem do magrelinho">
   <div id="game-container">
     <h1>Você conhece o magrelo?</h1>
     <div id="question-container">
