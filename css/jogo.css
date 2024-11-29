@@ -25,6 +25,31 @@
     padding: 10px 0;
 }
 
+.start-game {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #00a708;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.start-game:focus {
+    outline: none;
+}
+
+.paused .pipe,
+.paused .clouds,
+.paused .mario {
+    animation-play-state: paused;
+}
+
 .audio-button {
     position: absolute;
     top: 10px;
@@ -72,11 +97,13 @@ header {
     width: 80px;
     height: 80px;
     animation: pipeAnimation 2s infinite linear;
+    animation-play-state: paused;
 }
 .mario{
     position: absolute;
     bottom: 0px;
     width: 130px;
+    animation-play-state: paused;
 }
 
 .jump{
@@ -89,6 +116,7 @@ header {
     height: 200px;
     margin-top: 10px;
     animation: cloudsAnimation 4s infinite linear;
+    animation-play-state: paused;
 }
 
 .game-status{
